@@ -132,6 +132,17 @@ public partial class MainPageViewModel : ObservableObject
 	}
 
 	[RelayCommand]
+	void ToggleSelected(ConsumptionRecord record)
+	{
+		if (record == null)
+		{
+			return;
+		}
+
+		SelectedItem = ReferenceEquals(SelectedItem, record) ? null : record;
+	}
+
+	[RelayCommand]
 	async Task MoveToHistoryAsync(ConsumptionRecord record)
 	{
 		if (record == null || !record.IsEmpty || !ConsumptionList.Contains(record))

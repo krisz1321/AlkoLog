@@ -67,8 +67,7 @@
 
         <CollectionView Grid.Row="2"
                         ItemsSource="{Binding ConsumptionList}"
-                        SelectedItem="{Binding SelectedItem}"
-                        SelectionMode="Single">
+                        SelectionMode="None">
             <CollectionView.EmptyView>
                 <VerticalStackLayout Padding="20" Spacing="8" HorizontalOptions="Center" VerticalOptions="Center">
                     <Label Text="Még nincs rögzített fogyasztás"
@@ -109,6 +108,10 @@
                                                         StrokeThickness="1"
                                                         StrokeShape="RoundRectangle 20"
                                                         Margin="5">
+                                                 <Border.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ToggleSelectedCommand}"
+                                                                              CommandParameter="{Binding .}" />
+                                                 </Border.GestureRecognizers>
                                                  <Grid Padding="12"
                                                           RowDefinitions="Auto,Auto,Auto"
                                                           ColumnDefinitions="*,Auto">
