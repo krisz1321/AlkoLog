@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AlkoLog.AboutPage"
+             Title="Névjegy">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="14">
+
+            <Label
+                Text="Alkalmazás neve: AlkoLog"
+                FontSize="28"
+                FontAttributes="Bold"
+                HorizontalOptions="Center" />
+
+            <Label
+                Text="Fejlesztő: Erdei Krisztián"
+                FontSize="18"
+                FontAttributes="Bold"
+                HorizontalOptions="Center" />
+
+            <Label
+                Text="Az AlkoLog alkalmazás által kiszámított véralkoholszint (‰) és a várható kijózanodási idő kizárólag elméleti becslésen (a Widmark-formulán) alapul, matematikai modellezéssel készült."
+                FontSize="16"
+                HorizontalTextAlignment="Center"
+                LineBreakMode="WordWrap" />
+
+            <Label
+                Text="A számítás nem 100%-os pontosságú, és nem garantálja a teljes kijózanodást! Az alkohol lebomlási sebessége és a véralkoholszint alakulása egyénenként drasztikusan változhat."
+                FontSize="16"
+                HorizontalTextAlignment="Center"
+                LineBreakMode="WordWrap" />
+
+            <Label
+                Text="A valós értékeket olyan, az app által nem mérhető biológiai tényezők is befolyásolják, mint: az elfogyasztott étel mennyisége és zsírtartalma, az egyéni anyagcsere-sebesség és a máj aktuális állapota, a fáradtság, a stressz és az alvásmennyiség, az esetlegesen szedett gyógyszerek vagy fennálló egészségügyi kondíciók, valamint a hidratáltsági szint."
+                FontSize="16"
+                HorizontalTextAlignment="Center"
+                LineBreakMode="WordWrap" />
+
+            <Label
+                Text="Megbízható tanács: az alkalmazás adatai kizárólag tájékoztató és szórakoztató jellegűek. Soha ne ülj volán mögé, és ne végezz felelősségteljes munkát pusztán az app kijelzése alapján! Ha alkoholt fogyasztottál, a legbiztonságosabb döntés, ha a vezetést a következő napra halasztod, vagy alternatív fuvart (taxi, józan sofőr) keresel. A felelősség minden esetben a felhasználót terheli."
+                FontSize="16"
+                HorizontalTextAlignment="Center"
+                LineBreakMode="WordWrap" />
+
+            <Label
+                Text="Verzió: v1.0"
+                FontSize="18"
+                FontAttributes="Bold"
+                HorizontalOptions="Center"
+                Margin="0,12,0,0" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

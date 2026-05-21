@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AlkoLog.NewDrinkPage"
+             Title="Új ital felvétele">
+
+    <VerticalStackLayout Padding="20" Spacing="15">
+
+        <Label Text="Ital neve:"
+               FontAttributes="Bold" />
+        <Entry Text="{Binding Name}"
+               Placeholder="Pl. Világos sör" />
+
+        <Label Text="Alkoholfok (%):"
+               FontAttributes="Bold" />
+        <Entry Text="{Binding AlcoholPercent}"
+               Keyboard="Numeric"
+               Placeholder="Pl. 5" />
+
+        <Label Text="Italkép"
+               FontAttributes="Bold" />
+        <Image Source="{Binding ImagePath}"
+               HeightRequest="180"
+               Aspect="AspectFit" />
+
+        <Button Text="Italkép készítése"
+                Clicked="TakePhotoButton_Clicked" />
+
+       <Button x:Name="SaveButton"
+              Text="Mentés és visszalépés"
+                Clicked="Button_Clicked"
+                Margin="0,20,0,0" />
+
+    </VerticalStackLayout>
+</ContentPage>

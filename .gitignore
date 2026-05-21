@@ -1,0 +1,21 @@
+# Visual Studio belső fájlok
+.vs/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+AppPackages/
+BundleArtifacts/
+
+# MAUI / Xamarin specifikus
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# OS generált fájlok
+.DS_Store
+Thumbs.db

@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:AlkoLog"
+             x:Class="AlkoLog.MainPage"
+             x:DataType="local:MainPageViewModel"
+             Title="Főoldal"
+             BackgroundColor="{Binding MainBackgroundColor}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Button">
+                <Setter Property="BackgroundColor" Value="MidnightBlue" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="Margin" Value="5" />
+                <Setter Property="TextColor" Value="White" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+
+        <VerticalStackLayout Grid.Row="0"
+                             Padding="20,18,20,10"
+                             Spacing="6">
+
+            <Label Text="AlkoLog"
+                   FontSize="18"
+                   TextColor="{Binding MainTextColor}"
+                   HorizontalOptions="Center" />
+
+            <Label Text="Főoldal"
+                   FontSize="30"
+                   FontAttributes="Bold"
+                   TextColor="{Binding MainTextColor}"
+                   HorizontalOptions="Center" />
+
+            <Label Text="{Binding ProfileName}"
+                   FontSize="16"
+                   TextColor="{Binding MainTextColor}"
+                   HorizontalOptions="Center" />
+
+        </VerticalStackLayout>
+
+        <VerticalStackLayout Grid.Row="1"
+                             Padding="20,0,20,10"
+                             Spacing="6">
+
+            <Label Text="Aktuális véralkoholszint"
+                   FontSize="16"
+                   TextColor="{Binding MainTextColor}"
+                   HorizontalOptions="Center" />
+
+            <Label Text="{Binding BacText}"
+                   FontSize="34"
+                   FontAttributes="Bold"
+                   TextColor="{Binding MainTextColor}"
+                   HorizontalOptions="Center" />
+
+            <Label Text="{Binding SoberTimeText}"
+                   FontSize="15"
+                   TextColor="{Binding MainTextColor}"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center" />
+
+        </VerticalStackLayout>
+
+        <CollectionView Grid.Row="2"
+                        ItemsSource="{Binding ConsumptionList}"
+                        SelectedItem="{Binding SelectedItem}"
+                        SelectionMode="Single">
+            <CollectionView.EmptyView>
+                <VerticalStackLayout Padding="20" Spacing="8" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Label Text="Még nincs rögzített fogyasztás"
+                           FontAttributes="Bold"
+                           TextColor="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MainTextColor}"
+                           HorizontalOptions="Center" />
+                    <Label Text="Az első ital rögzítése után itt jelenik meg a napló."
+                           TextColor="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MainTextColor}"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="local:ConsumptionRecord">
+                    <Border Stroke="Black"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 20"
+                            Margin="5">
+                        <Grid Padding="12"
+                              RowDefinitions="Auto,Auto,Auto"
+                              ColumnDefinitions="*,Auto">
+
+                            <Label Text="{Binding DrinkDisplayName}"
+                                   FontSize="18"
+                                   FontAttributes="Bold" />
+
+                            <Label Grid.Row="1"
+                                   Text="{Binding AmountMl, StringFormat='Mennyiség: {0} ml'}"
+                                   TextColor="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MainTextColor}" />
+
+                            <Label Grid.Row="1"
+                                   Grid.Column="1"
+                                   Text="{Binding Timestamp, StringFormat='{}{0:HH:mm}'}"
+                                   TextColor="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MainTextColor}"
+                                   HorizontalOptions="End" />
+
+                            <HorizontalStackLayout Grid.Row="2"
+                                                   Grid.ColumnSpan="2"
+                                                   Spacing="10">
+                                <Label Text="{Binding Latitude, StringFormat='Szél.: {0:F3}'}"
+                                       FontSize="12"
+                                       TextColor="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MainTextColor}" />
+                                <Label Text="{Binding Longitude, StringFormat='Hossz.: {0:F3}'}"
+                                       FontSize="12"
+                                       TextColor="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MainTextColor}" />
+                            </HorizontalStackLayout>
+
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Grid Grid.Row="3"
+               Padding="10"
+               ColumnSpacing="12"
+               RowSpacing="10"
+               ColumnDefinitions="*,*"
+               RowDefinitions="Auto,Auto,Auto">
+
+          <Button Grid.Row="0"
+                 Grid.Column="0"
+                 Text="{Binding BackgroundColorToggleText}"
+                 Command="{Binding ToggleBackgroundColorCommand}" />
+
+          <Button Grid.Row="0"
+                 Grid.Column="1"
+                 Text="Ital rögzítése"
+                 Command="{Binding RecordDrinkCommand}" />
+
+           <Button Grid.Row="1"
+                  Grid.Column="0"
+                  Text="Megosztás"
+                  Command="{Binding ShareSelectedCommand}" />
+
+           <Button Grid.Row="1"
+                  Grid.Column="1"
+                  Text="Törlés"
+                  Command="{Binding DeleteSelectedCommand}" />
+
+           <Button Grid.Row="2"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="2"
+                  Text="+"
+                  FontSize="26"
+                  HorizontalOptions="Center"
+                  WidthRequest="140"
+                  HeightRequest="36"
+                  CornerRadius="18"
+                  Padding="0"
+                  Command="{Binding RepeatLastDrinkCommand}" />
+
+       </Grid>
+
+    </Grid>
+
+</ContentPage>

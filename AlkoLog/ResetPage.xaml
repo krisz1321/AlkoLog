@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AlkoLog.ResetPage"
+             Title="Alaphelyzet">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="14" VerticalOptions="Center">
+
+            <Label Text="AlkoLog visszaállítása"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <Label Text="Ez az oldal törli az összes mentett profilt, italkatalógust és fogyasztási naplót, majd az alkalmazást az alaphelyzetbe állítja."
+                   FontSize="16"
+                   HorizontalTextAlignment="Center"
+                   LineBreakMode="WordWrap" />
+
+            <Label Text="A művelet után újra meg kell adni a profilt, és az alap italok visszatöltődnek."
+                   FontSize="16"
+                   HorizontalTextAlignment="Center"
+                   LineBreakMode="WordWrap" />
+
+            <Button Text="Minden adat törlése"
+                    Clicked="Button_Clicked"
+                    Margin="0,16,0,0" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

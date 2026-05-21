@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:AlkoLog"
+             x:Class="AlkoLog.ProfilePage"
+             x:DataType="local:ProfilePageViewModel"
+             Title="Profil">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="14">
+
+            <Border HeightRequest="140"
+                    WidthRequest="140"
+                    Stroke="Gray"
+                    StrokeThickness="2"
+                    StrokeShape="Ellipse"
+                    HorizontalOptions="Center"
+                    Margin="0,10,0,0">
+                <Image Source="{Binding PhotoPath}"
+                       Aspect="AspectFill" />
+            </Border>
+
+            <Label Text="Profil"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <Label Text="Név"
+                   FontAttributes="Bold" />
+            <Entry Text="{Binding NameText}"
+                   Placeholder="Pl. Bence" />
+
+            <Label Text="Életkor"
+                   FontAttributes="Bold" />
+            <Entry Text="{Binding AgeText}"
+                   Keyboard="Numeric"
+                   Placeholder="Pl. 21" />
+
+            <Label Text="Testsúly (kg)"
+                   FontAttributes="Bold" />
+            <Entry Text="{Binding WeightText}"
+                   Keyboard="Numeric"
+                   Placeholder="Pl. 78" />
+
+            <Label Text="Biológiai nem"
+                   FontAttributes="Bold" />
+            <Picker ItemsSource="{Binding GenderOptions}"
+                    SelectedItem="{Binding Gender}"
+                    Title="Válassz nemet" />
+
+            <Button Text="Profilkép készítése"
+                    Command="{Binding TakePhotoCommand}" />
+
+            <Button Text="Mentés és visszalépés"
+                    Command="{Binding SaveCommand}"
+                    Margin="0,10,0,0" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
