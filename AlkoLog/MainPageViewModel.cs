@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.Text.Json;
 
 namespace AlkoLog;
@@ -728,7 +729,11 @@ public partial class MainPageViewModel : ObservableObject
 
 				if (location != null)
 				{
-					return $"Aktuális pozíció: {location.Latitude:0.#####}, {location.Longitude:0.#####}";
+					string latitude = location.Latitude.ToString("0.#####", CultureInfo.InvariantCulture);
+					string longitude = location.Longitude.ToString("0.#####", CultureInfo.InvariantCulture);
+					string mapsLink = $"https://www.google.com/maps/search/?api=1&query={latitude},{longitude}";
+
+					return $"Aktuális pozíció: {mapsLink}";
 				}
 			}
 		}
