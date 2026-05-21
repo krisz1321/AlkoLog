@@ -33,6 +33,17 @@ public partial class HistoryPageViewModel : ObservableObject
 		}
 	}
 
+	public void AddRecord(ConsumptionRecord record)
+	{
+		if (record == null)
+		{
+			return;
+		}
+
+		PrepareForHistory(record);
+		HistoryList.Add(record);
+	}
+
 	public void ResetData()
 	{
 		HistoryList.Clear();

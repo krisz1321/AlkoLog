@@ -74,4 +74,22 @@ public class ConsumptionRecord : INotifyPropertyChanged
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsEmptyingProgressVisible)));
         }
     }
+
+    bool isEmpty;
+
+    [JsonIgnore]
+    public bool IsEmpty
+    {
+        get => isEmpty;
+        set
+        {
+            if (isEmpty == value)
+            {
+                return;
+            }
+
+            isEmpty = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsEmpty)));
+        }
+    }
 }

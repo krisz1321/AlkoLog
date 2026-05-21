@@ -84,13 +84,34 @@
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="local:ConsumptionRecord">
-                    <Border Stroke="Black"
-                            StrokeThickness="1"
-                            StrokeShape="RoundRectangle 20"
-                            Margin="5">
-                        <Grid Padding="12"
-                              RowDefinitions="Auto,Auto,Auto"
-                              ColumnDefinitions="*,Auto">
+                                   <SwipeView IsEnabled="{Binding IsEmpty}">
+                                          <SwipeView.LeftItems>
+                                                 <SwipeItems Mode="Execute">
+                                                        <SwipeItem Text="Előzményekbe"
+                                                                         BackgroundColor="DarkSlateBlue"
+                                                                         IsEnabled="{Binding IsEmpty}"
+                                                                         Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MoveToHistoryCommand}"
+                                                                         CommandParameter="{Binding .}" />
+                                                 </SwipeItems>
+                                          </SwipeView.LeftItems>
+
+                                          <SwipeView.RightItems>
+                                                 <SwipeItems Mode="Execute">
+                                                        <SwipeItem Text="Előzményekbe"
+                                                                         BackgroundColor="DarkSlateBlue"
+                                                                         IsEnabled="{Binding IsEmpty}"
+                                                                         Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MoveToHistoryCommand}"
+                                                                         CommandParameter="{Binding .}" />
+                                                 </SwipeItems>
+                                          </SwipeView.RightItems>
+
+                                          <Border Stroke="Black"
+                                                        StrokeThickness="1"
+                                                        StrokeShape="RoundRectangle 20"
+                                                        Margin="5">
+                                                 <Grid Padding="12"
+                                                          RowDefinitions="Auto,Auto,Auto"
+                                                          ColumnDefinitions="*,Auto">
 
                             <Label Text="{Binding DrinkDisplayName}"
                                    FontSize="18"
@@ -130,8 +151,9 @@
                                        TextDecorations="{Binding TextDecorations}" />
                             </HorizontalStackLayout>
 
-                        </Grid>
-                    </Border>
+                                                 </Grid>
+                                          </Border>
+                                   </SwipeView>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

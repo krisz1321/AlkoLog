@@ -132,6 +132,21 @@ public partial class MainPageViewModel : ObservableObject
 	}
 
 	[RelayCommand]
+	async Task MoveToHistoryAsync(ConsumptionRecord record)
+	{
+		if (record == null || !record.IsEmpty || !ConsumptionList.Contains(record))
+		{
+			return;
+		}
+
+		ConsumptionList.Remove(record);
+		_historyPageViewModel.AddRecord(record);
+		await SaveDataAsync();
+		await _historyPageViewModel.SaveDataAsync();
+		await RefreshSummaryAsync(true, false);
+	}
+
+	[RelayCommand]
 	async Task RecordDrinkAsync()
 	{
 		try
@@ -505,6 +520,7 @@ public partial class MainPageViewModel : ObservableObject
 				record.TextDecorations = TextDecorations.None;
 				record.EmptyingProgressText = string.Empty;
 				record.IsEmptyingProgressVisible = false;
+				record.IsEmpty = false;
 			}
 
 			return;
@@ -518,6 +534,7 @@ public partial class MainPageViewModel : ObservableObject
 			bool wasEmpty = record.TextDecorations == TextDecorations.Strikethrough;
 			double remainingBac = GetCurrentBacContribution(record, referenceTime, currentProfile.Weight, genderFactor);
 			bool isEmpty = remainingBac <= 0;
+			record.IsEmpty = isEmpty;
 			record.TextDecorations = isEmpty
 				? TextDecorations.Strikethrough
 				: TextDecorations.None;
