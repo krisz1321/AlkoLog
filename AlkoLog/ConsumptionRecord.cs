@@ -38,4 +38,40 @@ public class ConsumptionRecord : INotifyPropertyChanged
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TextDecorations)));
         }
     }
+
+    string emptyingProgressText = string.Empty;
+
+    [JsonIgnore]
+    public string EmptyingProgressText
+    {
+        get => emptyingProgressText;
+        set
+        {
+            if (emptyingProgressText == value)
+            {
+                return;
+            }
+
+            emptyingProgressText = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EmptyingProgressText)));
+        }
+    }
+
+    bool isEmptyingProgressVisible;
+
+    [JsonIgnore]
+    public bool IsEmptyingProgressVisible
+    {
+        get => isEmptyingProgressVisible;
+        set
+        {
+            if (isEmptyingProgressVisible == value)
+            {
+                return;
+            }
+
+            isEmptyingProgressVisible = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsEmptyingProgressVisible)));
+        }
+    }
 }

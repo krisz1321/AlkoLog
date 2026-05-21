@@ -38,7 +38,7 @@ namespace AlkoLog
             }
 
             _summaryRefreshTimer = Dispatcher.CreateTimer();
-            _summaryRefreshTimer.Interval = TimeSpan.FromMinutes(1);
+            _summaryRefreshTimer.Interval = TimeSpan.FromSeconds(10);
             _summaryRefreshTimer.Tick += SummaryRefreshTimer_Tick;
             _summaryRefreshTimer.Start();
         }
@@ -57,7 +57,7 @@ namespace AlkoLog
 
         void SummaryRefreshTimer_Tick(object? sender, EventArgs e)
         {
-            _viewModel.RefreshSummary();
+            _viewModel.RefreshSummary(true);
         }
     }
 

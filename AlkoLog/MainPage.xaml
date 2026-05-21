@@ -102,12 +102,20 @@
                                    TextColor="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MainTextColor}"
                                    TextDecorations="{Binding TextDecorations}" />
 
-                            <Label Grid.Row="1"
-                                   Grid.Column="1"
-                                   Text="{Binding Timestamp, StringFormat='{}{0:yyyy.MM.dd HH:mm}'}"
-                                   TextColor="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MainTextColor}"
-                                   HorizontalOptions="End"
-                                   TextDecorations="{Binding TextDecorations}" />
+                            <VerticalStackLayout Grid.Row="1"
+                                                 Grid.Column="1"
+                                                 HorizontalOptions="End"
+                                                 Spacing="0">
+                                <Label Text="{Binding Timestamp, StringFormat='{}{0:yyyy.MM.dd HH:mm}'}"
+                                       TextColor="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MainTextColor}"
+                                       HorizontalOptions="End"
+                                       TextDecorations="{Binding TextDecorations}" />
+                                <Label Text="{Binding EmptyingProgressText}"
+                                       IsVisible="{Binding IsEmptyingProgressVisible}"
+                                       FontSize="11"
+                                       TextColor="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MainTextColor}"
+                                       HorizontalOptions="End" />
+                            </VerticalStackLayout>
 
                             <HorizontalStackLayout Grid.Row="2"
                                                    Grid.ColumnSpan="2"
