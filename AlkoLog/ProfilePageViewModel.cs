@@ -21,6 +21,9 @@ public partial class ProfilePageViewModel : ObservableObject
 	[ObservableProperty]
 	private string photoPath;
 
+	[ObservableProperty]
+	private bool vibrationEnabled = true;
+
 	public string[] GenderOptions { get; } = ["Férfi", "Nő"];
 
 	string filePath = Path.Combine(FileSystem.Current.AppDataDirectory, "profile.json");
@@ -33,6 +36,7 @@ public partial class ProfilePageViewModel : ObservableObject
 		Gender = string.Empty;
 		// Alapból a beépített profilkép látszik, amíg a felhasználó nem készít saját fotót.
 		PhotoPath = "profilkep.png";
+		VibrationEnabled = true;
 	}
 
 	[RelayCommand]
@@ -71,6 +75,7 @@ public partial class ProfilePageViewModel : ObservableObject
 		WeightText = string.Empty;
 		Gender = string.Empty;
 		PhotoPath = "profilkep.png";
+		VibrationEnabled = true;
 	}
 
 	[RelayCommand]
@@ -95,7 +100,8 @@ public partial class ProfilePageViewModel : ObservableObject
 				Age = age,
 				Weight = weight,
 				Gender = Gender ?? string.Empty,
-				PhotoPath = PhotoPath ?? string.Empty
+				PhotoPath = PhotoPath ?? string.Empty,
+				VibrationEnabled = VibrationEnabled
 			};
 
 			string jsonText = JsonSerializer.Serialize(profile);
@@ -124,6 +130,7 @@ public partial class ProfilePageViewModel : ObservableObject
 					WeightText = profile.Weight.ToString();
 					Gender = profile.Gender;
 					PhotoPath = string.IsNullOrWhiteSpace(profile.PhotoPath) ? "profilkep.png" : profile.PhotoPath;
+					VibrationEnabled = profile.VibrationEnabled;
 				}
 			}
 		}

@@ -48,6 +48,15 @@
                     SelectedItem="{Binding Gender}"
                     Title="Válassz nemet" />
 
+           <HorizontalStackLayout Spacing="12"
+                               VerticalOptions="Center">
+              <Label Text="Rezgés engedélyezése"
+                     FontAttributes="Bold"
+                     VerticalOptions="Center" />
+              <Switch IsToggled="{Binding VibrationEnabled}"
+                     HorizontalOptions="EndAndExpand" />
+           </HorizontalStackLayout>
+
             <Button Text="Profilkép készítése"
                     Command="{Binding TakePhotoCommand}" />
 

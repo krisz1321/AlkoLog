@@ -73,6 +73,7 @@ public partial class MainPageViewModel : ObservableObject
 
 		ConsumptionList.Add(record);
 		RecalculateSummary();
+		TryVibrate();
 	}
 
 	[RelayCommand]
@@ -252,7 +253,7 @@ public partial class MainPageViewModel : ObservableObject
 			}
 
 			await LoadProfileAsync();
-			RecalculateSummary();
+			RecalculateSummary(false);
 		}
 		catch (Exception ex)
 		{
@@ -360,10 +361,10 @@ public partial class MainPageViewModel : ObservableObject
 		return (latitude, longitude);
 	}
 
-	void RecalculateSummary()
+	void RecalculateSummary(bool allowVibration = true)
 	{
 		DateTime now = DateTime.Now;
-		UpdateConsumptionVisualStates(now);
+		UpdateConsumptionVisualStates(now, allowVibration);
 
 		if (!IsBackgroundColorEnabled)
 		{
@@ -421,8 +422,10 @@ public partial class MainPageViewModel : ObservableObject
 		SoberTimeText = $"Várható teljes kijózanodás: {BuildSoberTimeText(soberTime)}";
 	}
 
-	void UpdateConsumptionVisualStates(DateTime referenceTime)
+	void UpdateConsumptionVisualStates(DateTime referenceTime, bool allowVibration)
 	{
+		bool shouldVibrate = false;
+
 		if (currentProfile == null || currentProfile.Weight <= 0)
 		{
 			foreach (var record in ConsumptionList)
@@ -437,9 +440,40 @@ public partial class MainPageViewModel : ObservableObject
 
 		foreach (var record in ConsumptionList)
 		{
+			bool wasEmpty = record.TextDecorations == TextDecorations.Strikethrough;
 			record.TextDecorations = GetCurrentBacContribution(record, referenceTime, currentProfile.Weight, genderFactor) <= 0
 				? TextDecorations.Strikethrough
 				: TextDecorations.None;
+
+			if (allowVibration && !wasEmpty && record.TextDecorations == TextDecorations.Strikethrough)
+			{
+				shouldVibrate = true;
+			}
+		}
+
+		if (shouldVibrate)
+		{
+			TryVibrate();
+		}
+	}
+
+	void TryVibrate()
+	{
+		if (!(currentProfile?.VibrationEnabled ?? true))
+		{
+			return;
+		}
+
+		try
+		{
+			if (Vibration.Default.IsSupported)
+			{
+				Vibration.Default.Vibrate(TimeSpan.FromMilliseconds(80));
+			}
+		}
+		catch (Exception ex)
+		{
+			System.Diagnostics.Debug.WriteLine("HIBA REZGÉS KÖZBEN: " + ex.Message);
 		}
 	}
 
