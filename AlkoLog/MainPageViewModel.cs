@@ -34,12 +34,6 @@ public partial class MainPageViewModel : ObservableObject
 	private Color mainTextColor = Colors.WhiteSmoke;
 
 	[ObservableProperty]
-	private bool isBackgroundColorEnabled = true;
-
-	[ObservableProperty]
-	private string backgroundColorToggleText = "Háttérszín kikapcsolása";
-
-	[ObservableProperty]
 	private string repeatLastDrinkButtonText = string.Empty;
 
 	[ObservableProperty]
@@ -49,11 +43,14 @@ public partial class MainPageViewModel : ObservableObject
 	string profileFilePath = Path.Combine(FileSystem.Current.AppDataDirectory, "profile.json");
 	string catalogFilePath = Path.Combine(FileSystem.Current.AppDataDirectory, "catalog.json");
 
+	readonly HistoryPageViewModel _historyPageViewModel;
+
 	UserProfile? currentProfile;
 
-	public MainPageViewModel()
+	public MainPageViewModel(HistoryPageViewModel historyPageViewModel)
 	{
 		// A főoldal egy figyelhető listát használ, hogy a képernyő magától frissüljön.
+		_historyPageViewModel = historyPageViewModel;
 		ConsumptionList = new ObservableCollection<ConsumptionRecord>();
 		ConsumptionList.CollectionChanged += ConsumptionList_CollectionChanged;
 		UpdateRepeatLastDrinkState();
@@ -76,14 +73,6 @@ public partial class MainPageViewModel : ObservableObject
 		TryVibrate();
 	}
 
-	[RelayCommand]
-	void ToggleBackgroundColor()
-	{
-		IsBackgroundColorEnabled = !IsBackgroundColorEnabled;
-		BackgroundColorToggleText = IsBackgroundColorEnabled ? "Háttérszín kikapcsolása" : "Háttérszín bekapcsolása";
-		RecalculateSummary();
-	}
-
 	public void ResetData()
 	{
 		ConsumptionList.Clear();
@@ -94,8 +83,6 @@ public partial class MainPageViewModel : ObservableObject
 		SoberTimeText = "Várható teljes kijózanodás: -";
 		MainBackgroundColor = GetDefaultPageBackgroundColor();
 		MainTextColor = GetReadableTextColor(MainBackgroundColor);
-		IsBackgroundColorEnabled = true;
-		BackgroundColorToggleText = "Háttérszín kikapcsolása";
 		currentProfile = null;
 	}
 
@@ -135,6 +122,13 @@ public partial class MainPageViewModel : ObservableObject
 			Title = "AlkoLog megosztás",
 			Text = shareText
 		});
+	}
+
+	[RelayCommand]
+	async Task OpenHistoryAsync()
+	{
+		await MoveEmptiedRecordsToHistoryAsync(forceMoveAllEmpty: true);
+		await Shell.Current.GoToAsync("//HistoryPage");
 	}
 
 	[RelayCommand]
@@ -258,7 +252,7 @@ public partial class MainPageViewModel : ObservableObject
 			}
 
 			await LoadProfileAsync();
-			RecalculateSummary(true, false);
+			await RefreshSummaryAsync(true, false);
 		}
 		catch (Exception ex)
 		{
@@ -277,6 +271,42 @@ public partial class MainPageViewModel : ObservableObject
 		{
 			System.Diagnostics.Debug.WriteLine("HIBA FŐOLDAL MENTÉSKOR: " + ex.Message);
 		}
+	}
+
+	public async Task RefreshSummaryAsync(bool updateConsumptionVisuals = true, bool allowVibration = true)
+	{
+		await MoveEmptiedRecordsToHistoryAsync(forceMoveAllEmpty: false);
+		RecalculateSummary(updateConsumptionVisuals, allowVibration);
+	}
+
+	async Task MoveEmptiedRecordsToHistoryAsync(bool forceMoveAllEmpty)
+	{
+		if (currentProfile == null || currentProfile.Weight <= 0)
+		{
+			return;
+		}
+
+		double genderFactor = currentProfile.Gender == "Nő" ? 0.6 : 0.7;
+		DateTime now = DateTime.Now;
+
+		var recordsToMove = ConsumptionList
+			.Where(item => ShouldMoveToHistory(item, now, currentProfile.Weight, genderFactor, forceMoveAllEmpty))
+			.OrderBy(item => item.Timestamp)
+			.ToList();
+
+		if (recordsToMove.Count == 0)
+		{
+			return;
+		}
+
+		foreach (var record in recordsToMove)
+		{
+			ConsumptionList.Remove(record);
+		}
+
+		_historyPageViewModel.AddRecords(recordsToMove);
+		await SaveDataAsync();
+		await _historyPageViewModel.SaveDataAsync();
 	}
 
 	async Task LoadProfileAsync()
@@ -304,6 +334,35 @@ public partial class MainPageViewModel : ObservableObject
 		{
 			System.Diagnostics.Debug.WriteLine("HIBA PROFIL BETÖLTÉSKOR: " + ex.Message);
 		}
+	}
+
+	bool ShouldMoveToHistory(ConsumptionRecord item, DateTime referenceTime, double weight, double genderFactor, bool forceMoveAllEmpty)
+	{
+		DateTime emptyAt = GetEmptyTime(item, weight, genderFactor);
+
+		if (referenceTime < emptyAt)
+		{
+			return false;
+		}
+
+		if (forceMoveAllEmpty)
+		{
+			return true;
+		}
+
+		return referenceTime >= emptyAt.AddHours(24);
+	}
+
+	DateTime GetEmptyTime(ConsumptionRecord item, double weight, double genderFactor)
+	{
+		double totalEmptyHours = GetTotalEmptyHours(item, weight, genderFactor);
+		return item.Timestamp.AddHours(totalEmptyHours);
+	}
+
+	double GetTotalEmptyHours(ConsumptionRecord item, double weight, double genderFactor)
+	{
+		double initialBac = (item.AmountMl * (item.AlcoholPercent / 100.0) * 0.789) / (weight * genderFactor);
+		return Math.Max(0, initialBac) / BacEliminationRatePerHour;
 	}
 
 		double GetDefaultAmount(DrinkCatalogItem drink)
@@ -379,7 +438,7 @@ public partial class MainPageViewModel : ObservableObject
 			UpdateConsumptionVisualStates(now, allowVibration);
 		}
 
-		if (!IsBackgroundColorEnabled)
+		if (!(currentProfile?.BackgroundColorEnabled ?? true))
 		{
 			MainBackgroundColor = GetDefaultPageBackgroundColor();
 			MainTextColor = GetReadableTextColor(MainBackgroundColor);
@@ -390,7 +449,7 @@ public partial class MainPageViewModel : ObservableObject
 			CurrentBac = 0;
 			BacText = "0.000 %";
 			SoberTimeText = "Várható teljes kijózanodás: -";
-			if (IsBackgroundColorEnabled)
+			if (currentProfile?.BackgroundColorEnabled ?? true)
 			{
 				MainBackgroundColor = Colors.LightGreen;
 				MainTextColor = GetReadableTextColor(MainBackgroundColor);
@@ -408,7 +467,7 @@ public partial class MainPageViewModel : ObservableObject
 
 		CurrentBac = Math.Max(0, currentBacFromRecords);
 		BacText = $"{CurrentBac:0.000} %";
-		if (IsBackgroundColorEnabled)
+		if (currentProfile?.BackgroundColorEnabled ?? true)
 		{
 			MainBackgroundColor = GetBackgroundColor(CurrentBac);
 			MainTextColor = GetReadableTextColor(MainBackgroundColor);
@@ -417,7 +476,7 @@ public partial class MainPageViewModel : ObservableObject
 		if (CurrentBac <= 0)
 		{
 			SoberTimeText = "Várható teljes kijózanodás: -";
-			if (IsBackgroundColorEnabled)
+			if (currentProfile?.BackgroundColorEnabled ?? true)
 			{
 				MainBackgroundColor = Colors.LightGreen;
 				MainTextColor = GetReadableTextColor(MainBackgroundColor);

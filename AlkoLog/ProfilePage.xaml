@@ -57,6 +57,15 @@
                      HorizontalOptions="EndAndExpand" />
            </HorizontalStackLayout>
 
+           <HorizontalStackLayout Spacing="12"
+                                   VerticalOptions="Center">
+               <Label Text="Háttérszín engedélyezése"
+                      FontAttributes="Bold"
+                      VerticalOptions="Center" />
+               <Switch IsToggled="{Binding BackgroundColorEnabled}"
+                       HorizontalOptions="EndAndExpand" />
+           </HorizontalStackLayout>
+
             <Button Text="Profilkép készítése"
                     Command="{Binding TakePhotoCommand}" />
 

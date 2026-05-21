@@ -3,14 +3,16 @@ namespace AlkoLog;
 public partial class ResetPage : ContentPage
 {
     readonly MainPageViewModel _mainPageViewModel;
+    readonly HistoryPageViewModel _historyPageViewModel;
     readonly ProfilePageViewModel _profilePageViewModel;
     readonly CatalogPageViewModel _catalogPageViewModel;
 
-    public ResetPage(MainPageViewModel mainPageViewModel, ProfilePageViewModel profilePageViewModel, CatalogPageViewModel catalogPageViewModel)
+    public ResetPage(MainPageViewModel mainPageViewModel, HistoryPageViewModel historyPageViewModel, ProfilePageViewModel profilePageViewModel, CatalogPageViewModel catalogPageViewModel)
     {
         InitializeComponent();
 
         _mainPageViewModel = mainPageViewModel;
+        _historyPageViewModel = historyPageViewModel;
         _profilePageViewModel = profilePageViewModel;
         _catalogPageViewModel = catalogPageViewModel;
     }
@@ -31,8 +33,10 @@ public partial class ResetPage : ContentPage
             DeleteIfExists(Path.Combine(FileSystem.Current.AppDataDirectory, "catalog.json"));
             DeleteIfExists(Path.Combine(FileSystem.Current.AppDataDirectory, "drinkphoto.jpg"));
             DeleteIfExists(Path.Combine(FileSystem.Current.AppDataDirectory, "consumed.json"));
+            DeleteIfExists(Path.Combine(FileSystem.Current.AppDataDirectory, "history.json"));
 
             _mainPageViewModel.ResetData();
+            _historyPageViewModel.ResetData();
             _profilePageViewModel.ResetData();
             await _catalogPageViewModel.ResetDataAsync();
 

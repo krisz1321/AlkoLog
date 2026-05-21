@@ -145,8 +145,8 @@
 
           <Button Grid.Row="0"
                  Grid.Column="0"
-                 Text="{Binding BackgroundColorToggleText}"
-                 Command="{Binding ToggleBackgroundColorCommand}" />
+                 Text="Előzményekbe"
+                 Command="{Binding OpenHistoryCommand}" />
 
           <Button Grid.Row="0"
                  Grid.Column="1"

@@ -28,6 +28,13 @@
             Route="CatalogPage" />
     </FlyoutItem>
 
+    <FlyoutItem Title="Előzmények">
+        <ShellContent
+            Title="Előzmények"
+            ContentTemplate="{DataTemplate local:HistoryPage}"
+            Route="HistoryPage" />
+    </FlyoutItem>
+
     <FlyoutItem Title="About">
         <ShellContent
             Title="About"

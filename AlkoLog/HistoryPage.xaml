@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:AlkoLog"
+             x:Class="AlkoLog.HistoryPage"
+             x:DataType="local:HistoryPageViewModel"
+             Title="Előzmények"
+             BackgroundColor="WhiteSmoke">
+
+    <Grid RowDefinitions="*,Auto">
+        <CollectionView Grid.Row="0"
+                        ItemsSource="{Binding HistoryList}"
+                        SelectedItem="{Binding SelectedItem}"
+                        SelectionMode="Single">
+            <CollectionView.EmptyView>
+                <VerticalStackLayout Padding="24"
+                                     Spacing="8"
+                                     HorizontalOptions="Center"
+                                     VerticalOptions="Center">
+                    <Label Text="Még nincs előzmény"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           TextColor="Black" />
+                    <Label Text="Amikor egy ital kiürül és átkerül, itt jelenik meg majd."
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center"
+                           TextColor="Black" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="local:ConsumptionRecord">
+                    <Border Stroke="DarkGray"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 16"
+                            Margin="8"
+                            BackgroundColor="White">
+                        <Grid Padding="12"
+                              RowDefinitions="Auto,Auto"
+                              ColumnDefinitions="*,Auto">
+
+                            <Label Text="{Binding DrinkDisplayName}"
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="Black" />
+
+                            <Label Grid.Row="1"
+                                   Text="{Binding AmountMl, StringFormat='Mennyiség: {0} ml'}"
+                                   TextColor="Black" />
+
+                            <Label Grid.Row="1"
+                                   Grid.Column="1"
+                                   Text="{Binding Timestamp, StringFormat='{}{0:yyyy.MM.dd HH:mm}'}"
+                                   HorizontalOptions="End"
+                                   TextColor="Black" />
+
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Grid Grid.Row="1"
+              Padding="10"
+              ColumnDefinitions="*,*"
+              RowDefinitions="Auto">
+            <Button Grid.Column="0"
+                    Text="Törlés"
+                    Command="{Binding DeleteSelectedCommand}" />
+            <Button Grid.Column="1"
+                    Text="Vissza"
+                    Clicked="BackButton_Clicked" />
+        </Grid>
+    </Grid>
+</ContentPage>

@@ -55,9 +55,9 @@ namespace AlkoLog
             _summaryRefreshTimer = null;
         }
 
-        void SummaryRefreshTimer_Tick(object? sender, EventArgs e)
+        async void SummaryRefreshTimer_Tick(object? sender, EventArgs e)
         {
-            _viewModel.RefreshSummary(true);
+            await _viewModel.RefreshSummaryAsync(true, true);
         }
     }
 

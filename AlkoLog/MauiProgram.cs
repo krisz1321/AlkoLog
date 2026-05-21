@@ -16,10 +16,12 @@ namespace AlkoLog
                 });
 
             builder.Services.AddSingleton<MainPageViewModel>();
+            builder.Services.AddSingleton<HistoryPageViewModel>();
             builder.Services.AddSingleton<ProfilePageViewModel>();
             builder.Services.AddSingleton<CatalogPageViewModel>();
 
             builder.Services.AddSingleton<MainPage>();
+            builder.Services.AddSingleton<HistoryPage>();
             builder.Services.AddSingleton<ProfilePage>();
             builder.Services.AddSingleton<CatalogPage>();
             builder.Services.AddSingleton<AboutPage>();

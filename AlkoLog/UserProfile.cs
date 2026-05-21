@@ -13,4 +13,6 @@ public class UserProfile
     public string PhotoPath { get; set; } = string.Empty;
 
     public bool VibrationEnabled { get; set; } = true;
+
+    public bool BackgroundColorEnabled { get; set; } = true;
 }
