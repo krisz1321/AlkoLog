@@ -164,20 +164,25 @@ public partial class MainPageViewModel : ObservableObject
 				return;
 			}
 
+			string defaultAmountText = GetDefaultAmount(selectedDrink).ToString("0.#");
+
 			string amountText = await Shell.Current.DisplayPromptAsync(
 				"Ital rögzítése",
 				$"Mennyi millilitert ittál meg a(z) {selectedDrink.Name} italból?",
 				"Rögzítés",
 				"Mégse",
-				"50",
+				defaultAmountText,
 				keyboard: Keyboard.Numeric);
 
 			if (string.IsNullOrWhiteSpace(amountText))
 			{
-				return;
+				amountText = defaultAmountText;
 			}
 
-			double.TryParse(amountText, out double amountMl);
+			if (!double.TryParse(amountText, out double amountMl))
+			{
+				amountMl = GetDefaultAmount(selectedDrink);
+			}
 			var currentLocation = await GetCurrentLocationAsync();
 
 			var record = new ConsumptionRecord
@@ -301,6 +306,11 @@ public partial class MainPageViewModel : ObservableObject
 		}
 	}
 
+		double GetDefaultAmount(DrinkCatalogItem drink)
+		{
+			return drink.DefaultAmountMl > 0 ? drink.DefaultAmountMl : 50;
+		}
+
 	async Task<List<DrinkCatalogItem>> LoadCatalogItemsAsync()
 	{
 		try
@@ -324,9 +334,9 @@ public partial class MainPageViewModel : ObservableObject
 
 		return new List<DrinkCatalogItem>
 		{
-			new DrinkCatalogItem { Name = "Világos sör", AlcoholPercent = 5.0, ImagePath = "ital.png" },
-			new DrinkCatalogItem { Name = "Vörösbor", AlcoholPercent = 12.5, ImagePath = "ital.png" },
-			new DrinkCatalogItem { Name = "Házi pálinka", AlcoholPercent = 50.0, ImagePath = "ital.png" }
+			new DrinkCatalogItem { Name = "Világos sör", AlcoholPercent = 5.0, DefaultAmountMl = 500, ImagePath = "ital.png" },
+			new DrinkCatalogItem { Name = "Vörösbor", AlcoholPercent = 12.5, DefaultAmountMl = 150, ImagePath = "ital.png" },
+			new DrinkCatalogItem { Name = "Házi pálinka", AlcoholPercent = 50.0, DefaultAmountMl = 50, ImagePath = "ital.png" }
 		};
 	}
 

@@ -33,7 +33,8 @@ public partial class NewDrinkPage : ContentPage
 
         NewDrink = new DrinkCatalogItem
         {
-            ImagePath = "ital.png"
+            ImagePath = "ital.png",
+            DefaultAmountMl = 0
         };
 
         BindingContext = NewDrink;

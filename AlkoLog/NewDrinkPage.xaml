@@ -17,6 +17,12 @@
                Keyboard="Numeric"
                Placeholder="Pl. 5" />
 
+        <Label Text="Alapmennyiség (ml)"
+               FontAttributes="Bold" />
+        <Entry Text="{Binding DefaultAmountMl}"
+               Keyboard="Numeric"
+               Placeholder="Pl. 500" />
+
         <Label Text="Italkép"
                FontAttributes="Bold" />
         <Image Source="{Binding ImagePath}"

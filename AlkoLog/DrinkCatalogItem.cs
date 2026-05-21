@@ -11,6 +11,18 @@ public partial class DrinkCatalogItem : ObservableObject
     private double alcoholPercent;
 
     [ObservableProperty]
+    private double defaultAmountMl;
+
+    public string DefaultAmountText => DefaultAmountMl > 0
+        ? $"Alapmennyiség: {DefaultAmountMl:0.#} ml"
+        : "Alapmennyiség: nincs";
+
+    partial void OnDefaultAmountMlChanged(double value)
+    {
+        OnPropertyChanged(nameof(DefaultAmountText));
+    }
+
+    [ObservableProperty]
     private bool isFavorite;
 
     [ObservableProperty]

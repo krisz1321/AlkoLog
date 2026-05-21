@@ -104,20 +104,25 @@ public partial class CatalogPageViewModel : ObservableObject
 
 		try
 		{
+			string defaultAmountText = GetDefaultAmount(SelectedItem).ToString("0.#");
+
 			string amountText = await Shell.Current.DisplayPromptAsync(
 				"Ital megivása",
 				"Mennyi millilitert ittál meg?",
 				"Rögzítés",
 				"Mégse",
-				"50",
+				defaultAmountText,
 				keyboard: Keyboard.Numeric);
 
 			if (string.IsNullOrWhiteSpace(amountText))
 			{
-				return;
+				amountText = defaultAmountText;
 			}
 
-			double.TryParse(amountText, out double amountMl);
+			if (!double.TryParse(amountText, out double amountMl))
+			{
+				amountMl = GetDefaultAmount(SelectedItem);
+			}
 
 			await AddConsumptionRecordAsync(SelectedItem, amountMl, navigateHome: true);
 		}
@@ -155,7 +160,12 @@ public partial class CatalogPageViewModel : ObservableObject
 		}
 
 		ResetRapidTapTracking();
-		await AddConsumptionRecordAsync(tappedDrink, 50, navigateHome: false);
+		await AddConsumptionRecordAsync(tappedDrink, GetDefaultAmount(tappedDrink), navigateHome: false);
+	}
+
+	double GetDefaultAmount(DrinkCatalogItem drink)
+	{
+		return drink.DefaultAmountMl > 0 ? drink.DefaultAmountMl : 50;
 	}
 
 	async Task AddConsumptionRecordAsync(DrinkCatalogItem drink, double amountMl, bool navigateHome)
@@ -279,9 +289,9 @@ public partial class CatalogPageViewModel : ObservableObject
 	{
 		var defaultItems = new List<DrinkCatalogItem>
 		{
-			new DrinkCatalogItem { Name = "Világos sör", AlcoholPercent = 5.0, ImagePath = "ital.png" },
-			new DrinkCatalogItem { Name = "Vörösbor", AlcoholPercent = 12.5, ImagePath = "ital.png" },
-			new DrinkCatalogItem { Name = "Házi pálinka", AlcoholPercent = 50.0, ImagePath = "ital.png" }
+			new DrinkCatalogItem { Name = "Világos sör", AlcoholPercent = 5.0, DefaultAmountMl = 500, ImagePath = "ital.png" },
+			new DrinkCatalogItem { Name = "Vörösbor", AlcoholPercent = 12.5, DefaultAmountMl = 150, ImagePath = "ital.png" },
+			new DrinkCatalogItem { Name = "Házi pálinka", AlcoholPercent = 50.0, DefaultAmountMl = 50, ImagePath = "ital.png" }
 		};
 
 		foreach (var item in defaultItems)

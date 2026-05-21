@@ -39,6 +39,8 @@
                                                                          FontAttributes="Bold"
                                                                          FontSize="18" />
                                                                <Label Text="{Binding AlcoholPercent, StringFormat='Alkoholfok: {0}%'}" />
+                                                               <Label Text="{Binding DefaultAmountText}"
+                                                                         FontSize="12" />
                                                         </VerticalStackLayout>
                                                  </Grid>
 
