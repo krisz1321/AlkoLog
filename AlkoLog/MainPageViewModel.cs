@@ -7,6 +7,8 @@ namespace AlkoLog;
 
 public partial class MainPageViewModel : ObservableObject
 {
+	const double BacEliminationRatePerHour = 0.15;
+
 	public ObservableCollection<ConsumptionRecord> ConsumptionList { get; private set; }
 
 	[ObservableProperty]
@@ -331,6 +333,8 @@ public partial class MainPageViewModel : ObservableObject
 
 	void RecalculateSummary()
 	{
+		DateTime now = DateTime.Now;
+
 		if (!IsBackgroundColorEnabled)
 		{
 			MainBackgroundColor = GetDefaultPageBackgroundColor();
@@ -355,11 +359,10 @@ public partial class MainPageViewModel : ObservableObject
 			return;
 		}
 
-		double totalAlcoholGrams = ConsumptionList.Sum(item => item.AmountMl * (item.AlcoholPercent / 100.0) * 0.789);
 		double genderFactor = currentProfile.Gender == "Nő" ? 0.6 : 0.7;
-		double bac = totalAlcoholGrams / (currentProfile.Weight * genderFactor);
+		double currentBacFromRecords = ConsumptionList.Sum(item => GetCurrentBacContribution(item, now, currentProfile.Weight, genderFactor));
 
-		CurrentBac = Math.Max(0, bac);
+		CurrentBac = Math.Max(0, currentBacFromRecords);
 		BacText = $"{CurrentBac:0.000} %";
 		if (IsBackgroundColorEnabled)
 		{
@@ -383,9 +386,17 @@ public partial class MainPageViewModel : ObservableObject
 			return;
 		}
 
-		double soberHours = CurrentBac / 0.15;
-		DateTime soberTime = DateTime.Now.AddHours(soberHours);
+		double soberHours = CurrentBac / BacEliminationRatePerHour;
+		DateTime soberTime = now.AddHours(soberHours);
 		SoberTimeText = $"Várható teljes kijózanodás: {BuildSoberTimeText(soberTime)}";
+	}
+
+	double GetCurrentBacContribution(ConsumptionRecord item, DateTime referenceTime, double weight, double genderFactor)
+	{
+		double initialBac = (item.AmountMl * (item.AlcoholPercent / 100.0) * 0.789) / (weight * genderFactor);
+		double elapsedHours = Math.Max(0, (referenceTime - item.Timestamp).TotalHours);
+
+		return Math.Max(0, initialBac - (elapsedHours * BacEliminationRatePerHour));
 	}
 
 	Color GetBackgroundColor(double bac)
