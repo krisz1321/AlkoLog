@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Text.Json;
 
 namespace AlkoLog;
@@ -38,6 +39,12 @@ public partial class MainPageViewModel : ObservableObject
 	[ObservableProperty]
 	private string backgroundColorToggleText = "Háttérszín kikapcsolása";
 
+	[ObservableProperty]
+	private string repeatLastDrinkButtonText = string.Empty;
+
+	[ObservableProperty]
+	private bool isRepeatLastDrinkButtonVisible;
+
 	string consumptionFilePath = Path.Combine(FileSystem.Current.AppDataDirectory, "consumed.json");
 	string profileFilePath = Path.Combine(FileSystem.Current.AppDataDirectory, "profile.json");
 	string catalogFilePath = Path.Combine(FileSystem.Current.AppDataDirectory, "catalog.json");
@@ -48,6 +55,13 @@ public partial class MainPageViewModel : ObservableObject
 	{
 		// A főoldal egy figyelhető listát használ, hogy a képernyő magától frissüljön.
 		ConsumptionList = new ObservableCollection<ConsumptionRecord>();
+		ConsumptionList.CollectionChanged += ConsumptionList_CollectionChanged;
+		UpdateRepeatLastDrinkState();
+	}
+
+	void ConsumptionList_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+	{
+		UpdateRepeatLastDrinkState();
 	}
 
 	public void AddConsumption(ConsumptionRecord record)
@@ -82,6 +96,21 @@ public partial class MainPageViewModel : ObservableObject
 		IsBackgroundColorEnabled = true;
 		BackgroundColorToggleText = "Háttérszín kikapcsolása";
 		currentProfile = null;
+	}
+
+	void UpdateRepeatLastDrinkState()
+	{
+		var lastRecord = ConsumptionList.LastOrDefault();
+
+		if (lastRecord == null || string.IsNullOrWhiteSpace(lastRecord.DrinkName))
+		{
+			RepeatLastDrinkButtonText = string.Empty;
+			IsRepeatLastDrinkButtonVisible = false;
+			return;
+		}
+
+		RepeatLastDrinkButtonText = lastRecord.DrinkName;
+		IsRepeatLastDrinkButtonVisible = true;
 	}
 
 	[RelayCommand]
