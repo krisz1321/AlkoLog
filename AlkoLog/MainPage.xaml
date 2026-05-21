@@ -94,27 +94,32 @@
 
                             <Label Text="{Binding DrinkDisplayName}"
                                    FontSize="18"
-                                   FontAttributes="Bold" />
+                                   FontAttributes="Bold"
+                                   TextDecorations="{Binding TextDecorations}" />
 
                             <Label Grid.Row="1"
                                    Text="{Binding AmountMl, StringFormat='Mennyiség: {0} ml'}"
-                                   TextColor="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MainTextColor}" />
+                                   TextColor="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MainTextColor}"
+                                   TextDecorations="{Binding TextDecorations}" />
 
                             <Label Grid.Row="1"
                                    Grid.Column="1"
                                    Text="{Binding Timestamp, StringFormat='{}{0:yyyy.MM.dd HH:mm}'}"
                                    TextColor="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MainTextColor}"
-                                   HorizontalOptions="End" />
+                                   HorizontalOptions="End"
+                                   TextDecorations="{Binding TextDecorations}" />
 
                             <HorizontalStackLayout Grid.Row="2"
                                                    Grid.ColumnSpan="2"
                                                    Spacing="10">
                                 <Label Text="{Binding Latitude, StringFormat='Szél.: {0:F3}'}"
                                        FontSize="12"
-                                       TextColor="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MainTextColor}" />
+                                       TextColor="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MainTextColor}"
+                                       TextDecorations="{Binding TextDecorations}" />
                                 <Label Text="{Binding Longitude, StringFormat='Hossz.: {0:F3}'}"
                                        FontSize="12"
-                                       TextColor="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MainTextColor}" />
+                                       TextColor="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MainTextColor}"
+                                       TextDecorations="{Binding TextDecorations}" />
                             </HorizontalStackLayout>
 
                         </Grid>

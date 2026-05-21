@@ -363,6 +363,7 @@ public partial class MainPageViewModel : ObservableObject
 	void RecalculateSummary()
 	{
 		DateTime now = DateTime.Now;
+		UpdateConsumptionVisualStates(now);
 
 		if (!IsBackgroundColorEnabled)
 		{
@@ -418,6 +419,28 @@ public partial class MainPageViewModel : ObservableObject
 		double soberHours = CurrentBac / BacEliminationRatePerHour;
 		DateTime soberTime = now.AddHours(soberHours);
 		SoberTimeText = $"Várható teljes kijózanodás: {BuildSoberTimeText(soberTime)}";
+	}
+
+	void UpdateConsumptionVisualStates(DateTime referenceTime)
+	{
+		if (currentProfile == null || currentProfile.Weight <= 0)
+		{
+			foreach (var record in ConsumptionList)
+			{
+				record.TextDecorations = TextDecorations.None;
+			}
+
+			return;
+		}
+
+		double genderFactor = currentProfile.Gender == "Nő" ? 0.6 : 0.7;
+
+		foreach (var record in ConsumptionList)
+		{
+			record.TextDecorations = GetCurrentBacContribution(record, referenceTime, currentProfile.Weight, genderFactor) <= 0
+				? TextDecorations.Strikethrough
+				: TextDecorations.None;
+		}
 	}
 
 	double GetCurrentBacContribution(ConsumptionRecord item, DateTime referenceTime, double weight, double genderFactor)
