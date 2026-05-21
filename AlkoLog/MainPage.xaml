@@ -102,7 +102,7 @@
 
                             <Label Grid.Row="1"
                                    Grid.Column="1"
-                                   Text="{Binding Timestamp, StringFormat='{}{0:HH:mm}'}"
+                                   Text="{Binding Timestamp, StringFormat='{}{0:yyyy.MM.dd HH:mm}'}"
                                    TextColor="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MainTextColor}"
                                    HorizontalOptions="End" />
 
@@ -155,9 +155,8 @@
                   Grid.ColumnSpan="2"
                   Text="{Binding RepeatLastDrinkButtonText}"
                   IsVisible="{Binding IsRepeatLastDrinkButtonVisible}"
-                  FontSize="26"
-                  HorizontalOptions="Center"
-                  WidthRequest="140"
+                  FontSize="20"
+                  HorizontalOptions="Fill"
                   HeightRequest="36"
                   CornerRadius="18"
                   Padding="0"

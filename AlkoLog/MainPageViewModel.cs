@@ -109,7 +109,7 @@ public partial class MainPageViewModel : ObservableObject
 			return;
 		}
 
-		RepeatLastDrinkButtonText = lastRecord.DrinkName;
+		RepeatLastDrinkButtonText = $"{lastRecord.DrinkName} - {lastRecord.AmountMl:0.#} ml";
 		IsRepeatLastDrinkButtonVisible = true;
 	}
 
