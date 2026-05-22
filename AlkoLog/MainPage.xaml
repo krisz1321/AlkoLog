@@ -77,7 +77,7 @@
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="local:ConsumptionRecord">
-                                   <SwipeView IsEnabled="{Binding IsEmpty}">
+                                   <SwipeView>
                                           <SwipeView.LeftItems>
                                                  <SwipeItems Mode="Execute">
                                                         <SwipeItem Text="Előzményekbe"
@@ -106,6 +106,22 @@
                                                         <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ToggleSelectedCommand}"
                                                                               CommandParameter="{Binding .}" />
                                                  </Border.GestureRecognizers>
+                                                 <Border.Triggers>
+                                                        <DataTrigger TargetType="Border"
+                                                                     Binding="{Binding IsSelected}"
+                                                                     Value="True">
+                                                               <Setter Property="BackgroundColor" Value="#2A3B55" />
+                                                               <Setter Property="Stroke" Value="Gold" />
+                                                               <Setter Property="StrokeThickness" Value="2" />
+                                                        </DataTrigger>
+                                                        <DataTrigger TargetType="Border"
+                                                                     Binding="{Binding IsSelected}"
+                                                                     Value="False">
+                                                               <Setter Property="BackgroundColor" Value="Transparent" />
+                                                               <Setter Property="Stroke" Value="Black" />
+                                                               <Setter Property="StrokeThickness" Value="1" />
+                                                        </DataTrigger>
+                                                 </Border.Triggers>
                                                  <Grid Padding="12"
                                                           RowDefinitions="Auto,Auto,Auto"
                                                           ColumnDefinitions="*,Auto">

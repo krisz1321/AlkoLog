@@ -140,7 +140,20 @@ public partial class MainPageViewModel : ObservableObject
 			return;
 		}
 
-		SelectedItem = ReferenceEquals(SelectedItem, record) ? null : record;
+		if (ReferenceEquals(SelectedItem, record))
+		{
+			record.IsSelected = false;
+			SelectedItem = null;
+			return;
+		}
+
+		if (SelectedItem != null)
+		{
+			SelectedItem.IsSelected = false;
+		}
+
+		SelectedItem = record;
+		record.IsSelected = true;
 	}
 
 	[RelayCommand]

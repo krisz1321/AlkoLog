@@ -92,4 +92,22 @@ public class ConsumptionRecord : INotifyPropertyChanged
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsEmpty)));
         }
     }
+
+    bool isSelected;
+
+    [JsonIgnore]
+    public bool IsSelected
+    {
+        get => isSelected;
+        set
+        {
+            if (isSelected == value)
+            {
+                return;
+            }
+
+            isSelected = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSelected)));
+        }
+    }
 }
